@@ -1,4 +1,5 @@
 <!doctype html>
+<!--suppress HtmlFormInputWithoutLabel -->
 <html>
 <head>
     <meta charset="utf-8">
@@ -24,8 +25,52 @@
 <body>
 <div class="reveal">
     <div class="slides">
-        <section>Slide 1</section>
-        <section>Slide 2</section>
+
+        <section data-markdown>
+<textarea data-template>
+## Page title 1
+
+```cmake
+project(xxx)
+cmake_minimum_required(3.8)
+```
+</textarea>
+        </section>
+
+        <section data-markdown>
+<textarea data-template>
+## Page title 2
+
+```cpp
+#include &lt;vector&gt;
+int main() {
+    return 0;
+}
+```
+
+```console
+$ ls -la
+```
+</textarea>
+        </section>
+        <section data-markdown>
+
+<textarea data-template>
+## Page title 3
+
+```cpp
+#include &lt;vector&gt;
+int main() {
+    return 0;
+}
+```
+
+```console
+$ ls -la
+```
+</textarea>
+        </section>
+
     </div>
 </div>
 
@@ -41,7 +86,11 @@
             {src: 'plugin/markdown/marked.js'},
             {src: 'plugin/markdown/markdown.js'},
             {src: 'plugin/notes/notes.js', async: true},
-            {src: 'plugin/highlight/highlight.js', async: true, callback: function () {hljs.initHighlightingOnLoad();}}
+            {
+                src: 'plugin/highlight/highlight.js', async: true, callback: function () {
+                    hljs.initHighlightingOnLoad();
+                }
+            }
         ]
     });
 </script>
