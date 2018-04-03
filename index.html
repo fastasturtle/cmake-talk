@@ -26,48 +26,303 @@
 <div class="reveal">
     <div class="slides">
 
+        <section class="title">
+            <div>
+                <h1>Подводные камни CMake</h1>
+                <h3>и где они обитают</h3>
+                <p  style="margin-top: 5em;">Дмитрий Кожевников</p>
+            </div>
+        </section>
+
         <section data-markdown>
 <textarea data-template>
-## Page title 1
+## Что такое CMake
+
+* система генерации проектов
+* система сборки
+* инструмент для тестирования (CTest)
+* инструмент для создания пакетов и инсталляторов (CPack)
+</textarea>
+        </section>
+
+        <section data-markdown>
+<textarea data-template>
+## Зачем?
+
+* Windows/Linux/macOS
+* clang/gcc/cl.exe
+* Make/Ninja/VS solutions/Xcode projects/...
+* IDE
+
+</textarea>
+        </section>
+
+        <section data-markdown>
+<textarea data-template>
+## Пример
+#### (на самом деле нет)
 
 ```cmake
-project(xxx)
-cmake_minimum_required(3.8)
+CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
+PROJECT(MyProject)
+
+FIND_PACKAGE(Boost REQUIRED)
+INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIR})
+
+ADD_EXECUTABLE(myapp myMain.cpp)
+
+TARGET_LINK_LIBRARIES(myapp ${Boost_LIBRARIES})
 ```
 </textarea>
         </section>
 
         <section data-markdown>
 <textarea data-template>
-## Page title 2
+## Проблемы
 
-```cpp
-#include &lt;vector&gt;
-int main() {
-    return 0;
-}
+* Странный синтаксис
+* Глобальное состояние
+* Много способов решать одни и те же задачи
+* Устаревшая информация/дезинформация
+</textarea>
+        </section>
+
+        <section data-markdown>
+<textarea data-template>
+## Дезинформация: Google
+
+Пример: `CMakeForceCompiler`
+картинка с результатами гугла
+картинка двух версий, в одной из них выделено "deprecated"
+</textarea>
+        </section>
+
+        <section data-markdown>
+<textarea data-template>
+## Дезинформация: cmake_minimum_required
+
+```cmake
+cmake_minimum_required(VERSION 2.8)
 ```
 
+* Не запрещает использовать фичи из более новых версий
+* Включает имитацию особенностей старых версий (CMake policies)
+
+Пример с double-expand в if
+</textarea>
+        </section>
+
+        <section data-markdown>
+<textarea data-template>
+## Переменные (окружения)
+
+* Переменные CMake
+    - Пример обычных переменных
+    - Пример, как передавать через КС
+
+* Переменные окружения
+    - Пример переменных окружения
+    - Пример, как передавать через КС
+</textarea>
+        </section>
+
+        <section data-markdown>
+<textarea data-template>
+## CMakeCache.txt
+
+* Файл в build-директории
+* Двойной назначение:
+    - Редактор настроек
+        - `vi CMakeCache.txt`
+        - `ccache`
+        - CMake GUI
+    - Кэш долгих операций при конфигурации
+        - Общение с компилятором
+        - Поиск библиотек
+</textarea>
+        </section>
+
+        <section data-markdown>
+<textarea data-template>
+## Выбор компилятора
+</textarea>
+        </section>
+
+
+        <section data-markdown>
+<textarea data-template>
+## Смена компилятора: gotcha
+</textarea>
+        </section>
+
+        <section data-markdown>
+<textarea data-template>
+## Кросс-компиляция
+
+Вручную:
 ```console
-$ ls -la
+$ cmake \
+    -DCMAKE_CXX_COMPILER=/path/to/g++ \
+    -DCMAKE_SYSTEM_NAME=Linux \
+    -DCMAKE_FIND_ROOT_PATH=... \
+    ...
 ```
 </textarea>
         </section>
+
         <section data-markdown>
-
 <textarea data-template>
-## Page title 3
+## Toolchain file
 
-```cpp
-#include &lt;vector&gt;
-int main() {
-    return 0;
-}
+```cmake
+set(CMAKE_CXX_COMPILER "/path/to/g++")
+set(CMAKE_SYSTEM_NAME "Linux")
+set(CMAKE_FIND_ROOT_PATH "...")
+# ...
 ```
 
 ```console
-$ ls -la
+$ cmake -DCMAKE_TOOLCHAIN_FILE=/path/to/toolchain
 ```
+
+Преимущества:
+- Можно написать один раз и использовать в разных проектах
+- Может быть написан автором toolchain-а
+</textarea>
+        </section>
+
+        <section data-markdown>
+<textarea data-template>
+## Modern cmake?
+
+```cmake
+...
+```
+
+* Как узнать имена переменных?
+* Как понять, какие из них использовать?
+* Как понять, какие еще требования к использованию есть у библиотеки?
+    - примеры
+    - примеры
+</textarea>
+        </section>
+
+        <section data-markdown>
+<textarea data-template>
+## target_link_libraries
+
+> `target_link_libraries()` is the most mis-named command in the history of commands, maybe ever
+>
+> -- <cite>Donald J. Trump</cite>
+
+</textarea>
+        </section>
+
+        <section data-markdown>
+<textarea data-template>
+## target_link_libraries
+
+Варианты использования:
+1. Linker flag
+2. Library name
+3. Target name
+
+</textarea>
+        </section>
+
+        <section data-markdown>
+<textarea data-template>
+## Modern CMake!
+
+```cmake
+...
+
+```
+
+"::" в `boost::filesystem` запрещает нежелательное поведение `target_link_libraries()`
+</textarea>
+        </section>
+
+
+        <section data-markdown>
+<textarea data-template>
+## Imported target
+Cоздать target с нужными свойствами
+
+```cmake
+...
+
+```
+
+"::" в `boost::filesystem` запрещает нежелательное поведение `target_link_libraries()`
+</textarea>
+        </section>
+
+        <section data-markdown>
+<textarea data-template>
+## Exported target
+Автоматизация создания imported targets
+</textarea>
+        </section>
+
+        <section data-markdown>
+<textarea data-template>
+## Отладка
+* RTFM
+</textarea>
+        </section>
+
+        <section data-markdown>
+<textarea data-template>
+## Отладка
+* RTFM
+* Отладочная печать
+* Отладочные флаги
+* Граф зависимостей
+* Сюрприз
+</textarea>
+        </section>
+
+        <section data-markdown>
+<textarea data-template>
+## Отладочная печать
+* Отладочная печать
+</textarea>
+        </section>
+
+        <section data-markdown>
+<textarea data-template>
+## Отладочные флаги
+* Отладочная печать
+</textarea>
+        </section>
+
+        <section data-markdown>
+<textarea data-template>
+## Интерактивный отладчик
+* Интерактивный отладчик
+</textarea>
+        </section>
+
+        <section data-markdown>
+<textarea data-template>
+## Интерактивный отладчик
+* Интерактивный отладчик
+</textarea>
+        </section>
+
+        <section data-markdown>
+<textarea data-template>
+## Интерактивный отладчик
+* Интерактивный отладчик
+</textarea>
+        </section>
+
+
+        <section data-markdown>
+<textarea data-template>
+##
+* Интерактивный отладчик
 </textarea>
         </section>
 
