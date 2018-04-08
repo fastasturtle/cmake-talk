@@ -91,9 +91,8 @@ TARGET_LINK_LIBRARIES(myapp ${Boost_LIBRARIES})
 <textarea data-template>
 ## Дезинформация: Google
 
-Пример: `CMakeForceCompiler`
-картинка с результатами гугла
-картинка двух версий, в одной из них выделено "deprecated"
+![](img/add_library.png)
+
 </textarea>
         </section>
 
@@ -107,8 +106,42 @@ cmake_minimum_required(VERSION 2.8)
 
 * Не запрещает использовать фичи из более новых версий
 * Включает имитацию особенностей старых версий (CMake policies)
+</textarea>
+        </section>
 
-Пример с double-expand в if
+        <section data-markdown>
+<textarea data-template>
+## Двойное раскрытие переменных
+```cmake
+cmake_minimum_required(VERSION 2.6)
+project(xxx)
+
+set(GNU 1)
+# later
+if ("${CMAKE_CXX_COMPILER_ID}" MATCHES "GNU")
+    message("OK")
+else()
+    message("FAIL")
+endif()
+```
+
+Выведет "FAIL" (с предупреждением) в новых версиях CMake
+</textarea>
+        </section>
+
+        <section data-markdown>
+<textarea data-template>
+## cmake_minimum_required (на самом деле нет)
+```cmake
+cmake_minimum_required(VERSION 2.6)
+
+foreach(x RANGE 10)
+    # introduced in CMake 3.3
+    continue()
+endforeach()
+```
+
+Работает в новых версиях, не работает в старх версиях
 </textarea>
         </section>
 
