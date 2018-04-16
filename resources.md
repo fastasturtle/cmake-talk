@@ -9,3 +9,5 @@
   - https://mropert.github.io/2017/10/14/modern_cmake_video/
 - Pablo Arias "It's Time To Do CMake Right"
   - https://pabloariasal.github.io/2018/02/19/its-time-to-do-cmake-right/
+- CppLang Slack #cmake
+  - https://cpplang.now.sh/

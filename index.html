@@ -8,7 +8,7 @@
     <title>reveal.js</title>
 
     <link rel="stylesheet" href="css/reveal.css">
-    <link rel="stylesheet" href="css/theme/black.css">
+    <link rel="stylesheet" href="css/theme/white.css">
 
     <!-- Theme used for syntax highlighting of code -->
     <link rel="stylesheet" href="lib/css/zenburn.css">
@@ -316,8 +316,6 @@ find_package(Xxx)
         <section data-markdown>
 <textarea data-template>
 ## Пример
-#### (на самом деле нет)
-
 ```cmake
 CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
 PROJECT(MyProject)
@@ -334,8 +332,7 @@ TARGET_LINK_LIBRARIES(myapp ${Boost_LIBRARIES})
 * Как узнать имена переменных?
 * Как понять, какие из них использовать?
 * Что будет при апечатке
-* Как понять, какие еще требования к использованию есть у библиотеки?
-
+* Как узнать все требования к использованию?
 </textarea>
         </section>
 
@@ -484,7 +481,6 @@ $ cmake --graphviz=[file] ...
 <textarea data-template>
 ## Интерактивный отладчик
 - Justin Berger's fork
-- https://gitlab.kitware.com/jdavidberger/cmake/commits/debugger-wip
 - В процессе разработки
 </textarea>
         </section>
@@ -503,7 +499,16 @@ $ cmake --graphviz=[file] ...
 - Stephen Kelly "Embracing Modern CMake"
 - Mathieu Ropert "Modern CMake for modular design" (CppCon 2017)
 - Pablo Arias "It's Time To Do CMake Right"
+- CppLang Slack #cmake
 
+https://github.com/fastasturtle/cmake-talk/blob/master/resources.md
+
+</textarea>
+        </section>
+
+        <section data-markdown>
+<textarea data-template>
+## Спасибо за внимание!
 </textarea>
         </section>
 
