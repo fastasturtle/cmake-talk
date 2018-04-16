@@ -210,7 +210,7 @@ set(CACHED_VAR ON CACHE TYPE BOOL) # persistent, editable
 
         <section data-markdown>
 <textarea data-template>
-## Выбор компилятора
+## Смена компилятора
 CMakeLists.txt:
 ```cmake
 cmake_minimum_required(VERSION 3.5)
@@ -299,33 +299,51 @@ $ cmake -DCMAKE_TOOLCHAIN_FILE=/path/to/toolchain
         <section data-markdown>
 <textarea data-template>
 ## Как искать библиотеки
-TODO
+```cmake
+find_package(Xxx)
+```
+
+По умолчанию:
+- Ищет `FindXxx.cmake`
+    - Может поставляться с CMake
+    - Может находиться в `CMAKE_MODULE_PATH`
+- Ищет `XxxConfig.cmake`
+    - Обычно поставляется и устанавливается с библиотекой
+- Исполняет найденный скрипт
 </textarea>
         </section>
 
         <section data-markdown>
 <textarea data-template>
-## Modern cmake?
+## Пример
+#### (на самом деле нет)
 
 ```cmake
-...
+CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
+PROJECT(MyProject)
+
+FIND_PACKAGE(Boost REQUIRED)
+INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIR})
+
+ADD_EXECUTABLE(myapp myMain.cpp)
+
+TARGET_LINK_LIBRARIES(myapp ${Boost_LIBRARIES})
 ```
+
 
 * Как узнать имена переменных?
 * Как понять, какие из них использовать?
+* Что будет при апечатке
 * Как понять, какие еще требования к использованию есть у библиотеки?
-    - примеры
-    - примеры
+
 </textarea>
         </section>
 
+
+
         <section data-markdown>
 <textarea data-template>
-## target_link_libraries
-
-> `target_link_libraries()` is the most mis-named command in the history of commands, maybe ever
->
-> -- <cite>Donald J. Trump</cite>
+## Современный CMake
 
 </textarea>
         </section>
@@ -378,34 +396,87 @@ Cоздать target с нужными свойствами
         <section data-markdown>
 <textarea data-template>
 ## Отладка
-* RTFM
+RTFM
 </textarea>
         </section>
 
         <section data-markdown>
 <textarea data-template>
-## Отладка
+## Отладочная печать: переменные
+
+```cmake
+message(...)
+```
+
+Вывести некоторые переменные:
+```
+include(CMakePrintHelpers)
+cmake_print_variables(CMAKE_C_COMPILER CMAKE_CXX_COMPILER)
+```
+
+Вывести все переменные:
+```cmake
+get_cmake_property(varNames VARIABLES)
+include(CMakePrintHelpers)
+cmake_print_variables(${varNames})
+```
+
 </textarea>
         </section>
 
         <section data-markdown>
 <textarea data-template>
 ## Отладочная печать
-* Отладочная печать
+
+Полезные переменные:
+```cmake
+include(CMakePrintSystemInformation)
+```
+
+Переменные окружения:
+```cmake
+execute_process(COMMAND "${CMAKE_COMMAND}" "-E" "environment")
+```
+
+Вывести все target properties:
+- Stackoverflow :(
 </textarea>
         </section>
 
         <section data-markdown>
 <textarea data-template>
 ## Отладочные флаги
-* Отладочная печать
+
+Вывести переменные из CMakeCache.txt:
+```console
+$ cmake -LAH
+```
+
+Больше сообщений:
+```console
+$ cmake --debug-output
+```
+
+Stacktraces при ошибках:
+```console
+$ cmake --trace
+```
+
+Полезные предупреждения:
+```console
+$ cmake --warn-unitialized --warn-unused-vars
+```
 </textarea>
         </section>
 
         <section data-markdown>
 <textarea data-template>
-## Интерактивный отладчик
-* Интерактивный отладчик
+## Граф зависимостей
+```console
+$ cmake --graphviz=[file] ...
+```
+
+![](img/graph.png)
 </textarea>
         </section>
 
