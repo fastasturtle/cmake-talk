@@ -99,6 +99,11 @@ TARGET_LINK_LIBRARIES(myapp ${Boost_LIBRARIES})
 <textarea data-template>
 ## Альтернативы?
 
+- Более простые (Make)
+- Более привычные (MSVC/Xcode/Autotools)
+- Более мощные (Boost.Build, b2)
+- Более современные (Meson)
+
 </textarea>
         </section>
 
@@ -342,6 +347,47 @@ TARGET_LINK_LIBRARIES(myapp ${Boost_LIBRARIES})
 <textarea data-template>
 ## Современный CMake
 
+- targets описывают требования к своей сборке через "target properties"
+- "target properties" транзитивно распространяются на зависимости
+
+</textarea>
+        </section>
+
+        <section data-markdown>
+<textarea data-template>
+## CMake properties
+
+Global:
+```cmake
+include_directories(...)
+set_property(GLOBAL INCLUDE_DIRECTORIES ...)
+```
+
+Target:
+```cmake
+target_include_directories(foo ...)
+set_property(TARGET foo INCLUDE_DIRECTORIES ...) # or
+set_property(TARGET foo INTERFACE_INCLUDE_DIRECTORIES ...)
+```
+
+- PRIVATE: для собственной сборки
+- INTERFACE: для сборки зависимостей
+- PUBLIC: PRIVATE + INTERFACE
+
+</textarea>
+        </section>
+
+        <section data-markdown>
+<textarea data-template>
+## Пример
+```cmake
+cmake_minimum_required(VERSION 3.9)
+project(MyProject)
+
+find_package(Boost REQUIRED COMPONENTS filesystem)
+add_executable(myapp myMain.cpp)
+target_link_libraries(myapp PRIVATE Boost::filesystem)
+```
 </textarea>
         </section>
 
@@ -349,11 +395,17 @@ TARGET_LINK_LIBRARIES(myapp ${Boost_LIBRARIES})
 <textarea data-template>
 ## target_link_libraries
 
-Варианты использования:
-1. Linker flag
-2. Library name
-3. Target name
+```cmake
+target_link_libraries(myapp X)
+```
 
+Что такое X:
+1. Linker flag (X == `-Wl,-specialFlag`)
+  - флаг в итоге: `-Wl,-specialFlag`
+2. Library name (X == `some_lib`)
+  - флаг в итоге: `-lsome_lib`
+3. Target name  (X == `some_target`)
+  - флаг в итоге: из target properties
 </textarea>
         </section>
 
@@ -362,11 +414,24 @@ TARGET_LINK_LIBRARIES(myapp ${Boost_LIBRARIES})
 ## Modern CMake!
 
 ```cmake
-...
-
+target_link_libraries(myapp PRIVATE Boost::filesystem)
 ```
 
-"::" в `boost::filesystem` запрещает нежелательное поведение `target_link_libraries()`
+- `::` в `Boost::filesystem` запрещает нежелательное поведение `target_link_libraries()`
+  - (`Boost::filesystem` должно быть известным target, иначе ошибка)
+</textarea>
+        </section>
+
+        <section data-markdown>
+<textarea data-template>
+## Не мешать!
+
+Плохо экспортировать properties, влияющие на сборку того, кто тебя использует
+
+- C++ standard
+- Warning level
+- Компилятор
+
 </textarea>
         </section>
 
