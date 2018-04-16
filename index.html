@@ -36,6 +36,14 @@
 
         <section data-markdown>
 <textarea data-template>
+## Обо мне
+
+TODO
+</textarea>
+        </section>
+
+        <section data-markdown>
+<textarea data-template>
 ## Что такое CMake
 
 * система генерации проектов
@@ -84,6 +92,13 @@ TARGET_LINK_LIBRARIES(myapp ${Boost_LIBRARIES})
 * Глобальное состояние
 * Много способов решать одни и те же задачи
 * Устаревшая информация/дезинформация
+</textarea>
+        </section>
+
+        <section data-markdown>
+<textarea data-template>
+## Альтернативы?
+
 </textarea>
         </section>
 
@@ -147,15 +162,33 @@ endforeach()
 
         <section data-markdown>
 <textarea data-template>
-## Переменные (окружения)
+## Переменные окружения
+```console
+$ VAR=1 cmake ..
+```
 
-* Переменные CMake
-    - Пример обычных переменных
-    - Пример, как передавать через КС
+```cmake
+message("VAR=$ENV{VAR}") # prints VAR=1
+message("VAR=${VAR}") # prints VAR=
+set(ENV{VAR} 2)
+message("VAR=$ENV{VAR}") # prints VAR=2
+```
+</textarea>
+        </section>
 
-* Переменные окружения
-    - Пример переменных окружения
-    - Пример, как передавать через КС
+        <section data-markdown>
+<textarea data-template>
+## Переменные cmake
+```console
+$ cmake .. -DVAR=1
+```
+
+```cmake
+message("VAR=${VAR}") # prints VAR=1
+message("VAR=$ENV{VAR}") # prints VAR=
+set(VAR 2)
+set(CACHED_VAR ON CACHE TYPE BOOL) # persistent, editable
+```
 </textarea>
         </section>
 
@@ -178,6 +211,22 @@ endforeach()
         <section data-markdown>
 <textarea data-template>
 ## Выбор компилятора
+CMakeLists.txt:
+```cmake
+cmake_minimum_required(VERSION 3.5)
+
+set(CMAKE_C_COMPILER gcc-7)
+set(CMAKE_CXX_COMPILER g++-7)
+
+project(cmake_test)
+
+# не здесь!
+```
+
+CMakeLists.txt:
+```console
+$ cmake -DCMAKE_CXX_COMPILER=g++-7 ...
+```
 </textarea>
         </section>
 
@@ -185,6 +234,29 @@ endforeach()
         <section data-markdown>
 <textarea data-template>
 ## Смена компилятора: gotcha
+```cmake
+cmake_minimum_required(VERSION 3.9)
+project(sample-proj)
+message("VAR=${VAR}")
+# ...
+```
+
+```console
+$ cmake .. -DCMAKE_CXX_COMPILER=c++ -DSOME_VAR=1
+```
+
+```console
+You have changed variables that require your cache to be deleted.
+ Configure will be re-run and you may have to reset some variables.
+ The following variables have changed:
+ CMAKE_C_COMPILER=g++
+```
+
+```console
+VAR=
+```
+
+Нужно перезапустить еще раз!
 </textarea>
         </section>
 
@@ -221,6 +293,13 @@ $ cmake -DCMAKE_TOOLCHAIN_FILE=/path/to/toolchain
 Преимущества:
 - Можно написать один раз и использовать в разных проектах
 - Может быть написан автором toolchain-а
+</textarea>
+        </section>
+
+        <section data-markdown>
+<textarea data-template>
+## Как искать библиотеки
+TODO
 </textarea>
         </section>
 
@@ -286,8 +365,6 @@ Cоздать target с нужными свойствами
 ...
 
 ```
-
-"::" в `boost::filesystem` запрещает нежелательное поведение `target_link_libraries()`
 </textarea>
         </section>
 
@@ -308,11 +385,6 @@ Cоздать target с нужными свойствами
         <section data-markdown>
 <textarea data-template>
 ## Отладка
-* RTFM
-* Отладочная печать
-* Отладочные флаги
-* Граф зависимостей
-* Сюрприз
 </textarea>
         </section>
 
