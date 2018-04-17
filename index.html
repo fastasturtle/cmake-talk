@@ -38,7 +38,10 @@
 <textarea data-template>
 ## Обо мне
 
-TODO
+- 7+ лет разработки на C++
+    - большой кроссплатформенный CMake-проект
+- сейчас - JetBrains, команда CLion
+    - (пока что) понимает только CMake проекты
 </textarea>
         </section>
 
@@ -320,6 +323,16 @@ find_package(Xxx)
 
         <section data-markdown>
 <textarea data-template>
+## Boost gotcha
+- Boost - не CMake-проект
+- FindBoost.cmake - поддерживается community
+- Перестает работать с каждым новым релизом Boost
+- Решение: скопировать FindBoost.cmake из cmake master
+</textarea>
+        </section>
+
+        <section data-markdown>
+<textarea data-template>
 ## Пример
 ```cmake
 CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
@@ -439,11 +452,16 @@ target_link_libraries(myapp PRIVATE Boost::filesystem)
         <section data-markdown>
 <textarea data-template>
 ## Imported target
-Cоздать target с нужными свойствами
+Создать target с нужными свойствами
 
 ```cmake
-...
+find_package(Foo) # old-style Find module
 
+add_library(foo SHARED IMPORTED)
+set_target_properties(foo PROPERTIES
+    IMPORTED_LOCATION ${FOO_LIBRARIES}
+    INTERFACE_INCLUDE_DIRECTORIES ${FOO_INCLUDE_DIR}
+    INTERFACE_COMPILE_DEFINITIONS "ENABLE_FOO")
 ```
 </textarea>
         </section>
@@ -451,7 +469,9 @@ Cоздать target с нужными свойствами
         <section data-markdown>
 <textarea data-template>
 ## Exported target
-Автоматизация создания imported targets
+- Автоматизация создания imported targets
+- На этапе инсталляции генерирует код с предыдущего слайда
+- CMake-файл распространяется с библиотекой
 </textarea>
         </section>
 
