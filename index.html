@@ -323,7 +323,18 @@ find_package(Xxx)
 
         <section data-markdown>
 <textarea data-template>
-## Boost gotcha
+## find_package: gotcha
+
+- В CMakeCache.txt сохраняются результаты поиска библиотек
+- Успешный поиск не повторяется заново
+- При смене версии/путей результат может устареть
+- Решение - удалить соответствующие переменные (или CMakeCache.txt целиком)
+</textarea>
+        </section>
+
+        <section data-markdown>
+<textarea data-template>
+## Boost: gotcha
 - Boost - не CMake-проект
 - FindBoost.cmake - поддерживается community
 - Перестает работать с каждым новым релизом Boost
