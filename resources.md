@@ -20,6 +20,8 @@
 # Misc
 - CMake project template:
   - https://github.com/Lectem/cpp-boilerplate
+- Print all target properties:
+  - https://stackoverflow.com/a/34292622
 - CppLang Slack #cmake
   - https://cpplang.now.sh/
 - CMake interactive debugger (WIP):

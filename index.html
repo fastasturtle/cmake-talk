@@ -171,7 +171,8 @@ endforeach()
 
         <section data-markdown>
 <textarea data-template>
-## Переменные окружения
+## Переменные
+Переменные окружения:
 ```console
 $ VAR=1 cmake ..
 ```
@@ -182,6 +183,17 @@ message("VAR=${VAR}") # prints VAR=
 set(ENV{VAR} 2)
 message("VAR=$ENV{VAR}") # prints VAR=2
 ```
+
+Переменные CMake:
+```console
+$ cmake .. -DVAR=1
+```
+
+```cmake
+message("VAR=${VAR}") # prints VAR=1
+message("VAR=$ENV{VAR}") # prints VAR=
+set(VAR 2)
+```
 </textarea>
         </section>
 
@@ -189,17 +201,12 @@ message("VAR=$ENV{VAR}") # prints VAR=2
 <textarea data-template>
 ## Переменные cmake
 ```console
-$ cmake .. -DVAR=1 -DCACHED_VAR="Yes"
+$ cmake .. -DVAR="Yes"
 ```
 
 ```cmake
-message("VAR=${VAR}") # prints VAR=1
-message("VAR=$ENV{VAR}") # prints VAR=
-set(VAR 2)
-
-message("CACHED_VAR=${CACHED_VAR}") # prints CACHED_VAR="Yes"
-set(CACHED_VAR "No" CACHE TYPE STRING)
-message("CACHED_VAR=${CACHED_VAR}") # prints CACHED_VAR="Yes"
+set(VAR "No" CACHE TYPE STRING)
+message("VAR=${VAR}") # prints VAR="Yes"
 ```
 </textarea>
         </section>
@@ -367,7 +374,7 @@ TARGET_LINK_LIBRARIES(myapp ${Boost_LIBRARIES})
 
 * Как узнать имена переменных?
 * Как понять, какие из них использовать?
-* Что будет при опечатке
+* Что будет при опечатке?
 * Как узнать все требования к использованию?
 </textarea>
         </section>
@@ -428,7 +435,7 @@ target_link_libraries(myapp PRIVATE Boost::filesystem)
 <textarea data-template>
 ## target_link_libraries
 
-1. Флаг линковщика:
+Флаг линковщика:
 ```cmake
 target_link_libraries(myapp -lfoo)
 ```
@@ -436,7 +443,7 @@ target_link_libraries(myapp -lfoo)
 /usr/bin/c++  ... -lfoo
 ```
 
-2. Имя библиотеки:
+Имя библиотеки:
 ```cmake
 target_link_libraries(myapp foo)
 ```
@@ -444,7 +451,7 @@ target_link_libraries(myapp foo)
 /usr/bin/c++  ... -lfoo
 ```
 
-3. Target:
+Target:
 ```cmake
 target_link_libraries(myapp target)
 ```
@@ -462,8 +469,7 @@ target_link_libraries(myapp target)
 target_link_libraries(myapp PRIVATE Boost::filesystem)
 ```
 
-- `::` в `Boost::filesystem` запрещает нежелательное поведение `target_link_libraries()`
-  - (`Boost::filesystem` должно быть известным target, иначе ошибка)
+"`::`" запрещает нежелательное поведение
 </textarea>
         </section>
 
@@ -553,7 +559,7 @@ execute_process(COMMAND "${CMAKE_COMMAND}" "-E" "environment")
 ```
 
 Вывести все target properties:
-- Stackoverflow :(
+https://stackoverflow.com/a/34292622
 </textarea>
         </section>
 
@@ -599,6 +605,7 @@ $ cmake --graphviz=[file] ...
 ## Интерактивный отладчик
 - Justin Berger's fork
 - В процессе разработки
+- https://gitlab.kitware.com/jdavidberger
 ![](img/debugger.png) <!-- .element height="60%" width="60%" -->
 </textarea>
         </section>
@@ -635,6 +642,7 @@ https://github.com/fastasturtle/cmake-talk/
     // - https://github.com/hakimel/reveal.js#configuration
     // - https://github.com/hakimel/reveal.js#dependencies
     Reveal.initialize({
+        history: true,
         dependencies: [
             {src: 'plugin/markdown/marked.js'},
             {src: 'plugin/markdown/markdown.js'},
