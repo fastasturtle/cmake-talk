@@ -104,7 +104,7 @@ TARGET_LINK_LIBRARIES(myapp ${Boost_LIBRARIES})
 
 - Более простые (Make)
 - Более привычные (MSVC/Xcode/Autotools)
-- Более мощные (Boost.Build, b2)
+- Более мощные (Boost.Build, build2)
 - Более современные (Meson)
 
 </textarea>
@@ -188,14 +188,17 @@ message("VAR=$ENV{VAR}") # prints VAR=2
 <textarea data-template>
 ## Переменные cmake
 ```console
-$ cmake .. -DVAR=1
+$ cmake .. -DVAR=1 -DCACHED_VAR="Yes"
 ```
 
 ```cmake
 message("VAR=${VAR}") # prints VAR=1
 message("VAR=$ENV{VAR}") # prints VAR=
 set(VAR 2)
-set(CACHED_VAR ON CACHE TYPE BOOL) # persistent, editable
+
+message("CACHED_VAR=${CACHED_VAR}") # prints CACHED_VAR="Yes"
+set(CACHED_VAR "No" CACHE TYPE STRING)
+message("CACHED_VAR=${CACHED_VAR}") # prints CACHED_VAR="Yes"
 ```
 </textarea>
         </section>
@@ -219,6 +222,12 @@ set(CACHED_VAR ON CACHE TYPE BOOL) # persistent, editable
         <section data-markdown>
 <textarea data-template>
 ## Смена компилятора
+
+Переменные окружения:
+```console
+$ CXX=g++-7 CC=gcc-7 cmake <...>
+```
+
 CMakeLists.txt:
 ```cmake
 cmake_minimum_required(VERSION 3.5)
@@ -250,7 +259,7 @@ message("VAR=${VAR}")
 ```
 
 ```console
-$ cmake .. -DCMAKE_CXX_COMPILER=c++ -DSOME_VAR=1
+$ cmake .. -DCMAKE_CXX_COMPILER=c++ -DVAR=1
 ```
 
 ```console
@@ -295,7 +304,7 @@ set(CMAKE_FIND_ROOT_PATH "...")
 ```
 
 ```console
-$ cmake -DCMAKE_TOOLCHAIN_FILE=/path/to/toolchain
+$ cmake -DCMAKE_TOOLCHAIN_FILE=/path/to/toolchain.cmake
 ```
 
 Преимущества:
@@ -360,7 +369,7 @@ TARGET_LINK_LIBRARIES(myapp ${Boost_LIBRARIES})
 
 * Как узнать имена переменных?
 * Как понять, какие из них использовать?
-* Что будет при апечатке
+* Что будет при опечатке
 * Как узнать все требования к использованию?
 </textarea>
         </section>
@@ -371,8 +380,10 @@ TARGET_LINK_LIBRARIES(myapp ${Boost_LIBRARIES})
 <textarea data-template>
 ## Современный CMake
 
-- targets описывают требования к своей сборке через "target properties"
-- "target properties" транзитивно распространяются на зависимости
+- Не использовать глобальное состояние
+- Не менять флаги компилятора напрямую
+- Targets описывают требования к своей сборке через "target properties"
+- "Target properties" транзитивно распространяются на зависимости
 
 </textarea>
         </section>
